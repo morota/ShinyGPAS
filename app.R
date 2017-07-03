@@ -20,7 +20,7 @@ ui <- navbarPage(title = "ShinyGPAS",
                             sliderInput("Me1",
                                         "Number of independent chromosome segments (Me):",
                                         min = 0,
-                                        max = 5000,
+                                        max = 10000,
                                         value = 500),
                             
                             radioButtons('xaxis', 'X-axis', c("h2"="h21", "N"="N1", "Me"="Me1"), inline = TRUE)
@@ -50,13 +50,13 @@ ui <- navbarPage(title = "ShinyGPAS",
                             sliderInput("Me2",
                                         "Number of independent chromosome segments (Me):",
                                         min = 0,
-                                        max = 5000,
+                                        max = 10000,
                                         value = 500),
                             
                             sliderInput("Ne2",
                                         "Number of effective population size (Ne):",
                                         min = 0,
-                                        max = 5000,
+                                        max = 10000,
                                         value = 500),
                             
                             radioButtons('xaxis2', 'X-axis', c("h2"="h22", "N"="N2", "Me" = "Me2", "Ne" = "Ne2"), inline = TRUE)
@@ -86,7 +86,7 @@ ui <- navbarPage(title = "ShinyGPAS",
                             sliderInput("Me3",
                                         "Number of independent chromosome segments (Me):",
                                         min = 0,
-                                        max = 5000,
+                                        max = 10000,
                                         value = 500),
                             
                             sliderInput("b3",
@@ -148,7 +148,7 @@ ui <- navbarPage(title = "ShinyGPAS",
                             sliderInput("Me4",
                                         "Number of independent chromosome segments (Me):",
                                         min = 0,
-                                        max = 5000,
+                                        max = 10000,
                                         value = 500),
                             
                             radioButtons('xaxis4', 'X-axis', c("h2"="h24", "N"="N4", "Me"="Me4"), inline = TRUE)
@@ -232,7 +232,7 @@ ui <- navbarPage(title = "ShinyGPAS",
                             sliderInput("Me6",
                                         "Number of independent chromosome segments (Me):",
                                         min = 0,
-                                        max = 5000,
+                                        max = 10000,
                                         value = 500),
                             
                             
