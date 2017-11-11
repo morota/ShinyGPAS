@@ -107,8 +107,78 @@ ui <- navbarPage(title = "ShinyGPAS",
                  ),
                  
 
-                 
                  tabPanel(title = "S4",
+                          sidebarPanel(
+                            radioButtons('xaxis7', 'X-axis', c("h2"="h27", "N"="N7", "Me" = "Me7"), inline = TRUE),
+                            
+                            sliderInput("h27",
+                                        "Heritability (h2):",
+                                        min = 0,
+                                        max = 1,
+                                        value = 0.5),
+                            
+                            sliderInput("N7",
+                                        "Number of individuals (N):",
+                                        min = 0,
+                                        max = 30000,
+                                        value = 1000),
+                            
+                            sliderInput("Me7",
+                                        "Number of independent chromosome segments (Me):",
+                                        min = 0,
+                                        max = 10000,
+                                        value = 1000)
+                            
+                            
+                            
+                          ),
+                          
+                          tags$a(href="https://doi.org/10.1371/journal.pone.0156086", "Rabier et al. (2016) - Equation 7", target="_blank"), 
+                          mainPanel(
+                            plotlyOutput("distPlot7")
+                          )
+                 ),
+                 
+                 
+                 
+                 
+                 tabPanel(title = "S5",
+                          sidebarPanel(
+                            radioButtons('xaxis8', 'X-axis', c("h2"="h28",  "E||x'_nTRN+1 X' V^{-1}||^2" = "E8"), inline = TRUE),
+                            
+                            sliderInput("h28",
+                                        "Heritability (h2):",
+                                        min = 0,
+                                        max = 1,
+                                        value = 0.5),
+                            
+                            
+                            
+                            sliderInput("E8",
+                                        "E||x'_nTRN+1 X' V^{-1}||^2 (E2)",
+                                        min = 0,
+                                        max = 1,
+                                        value = 0.5)
+                            
+                            
+                            
+                          ),
+                          
+                          tags$a(href="https://doi.org/10.1371/journal.pone.0156086", "Rabier et al. (2016) - Equation 6", target="_blank"), 
+                          mainPanel(
+                            plotlyOutput("distPlot8")
+                          )
+                 ),
+                 
+                 
+                 
+                
+                 
+                 
+                  
+                 
+                 
+                 tabPanel(title = "S6",
                           sidebarPanel(
                             radioButtons('xaxis5', 'X-axis', c("h2"="h25", "b" = "b5"), inline = TRUE),
                             
@@ -134,7 +204,7 @@ ui <- navbarPage(title = "ShinyGPAS",
                  ),
                  
                  
-                 tabPanel(title = "S5",
+                 tabPanel(title = "S7",
                           sidebarPanel(
                             radioButtons('xaxis4', 'X-axis', c("h2"="h24", "N"="N4", "Me"="Me4"), inline = TRUE),
                             
@@ -169,7 +239,7 @@ ui <- navbarPage(title = "ShinyGPAS",
                  
                  
                  
-                 tabPanel(title = "S6",
+                 tabPanel(title = "S8",
                           sidebarPanel(
                             
                             radioButtons('xaxis6', 'X-axis', c( "rG" = "rG_AC6", "b" = "b_AC6",  "h2"="h26a", "N" = "N6a", "Me" = "MeAC6"), inline = TRUE),
@@ -290,6 +360,7 @@ server <- function(input, output) {
     #h2 <- seq(0, 1, by=0.001)
     h2 <- seq(0, input$h22, by=0.001)
     lambda <- (input$Me2) / (h2 * log(2 * input$Ne2))
+    #lambda <- (input$Me2 *(1-h2)) / (h2 * log(2 * input$Ne2))
     alpha <- 1 + 2 *( input$Me2 / (input$N2 * h2 * log(2 * input$Ne2)) )
     r <- sqrt(  1 - lambda/(2 * input$N2 * sqrt(alpha)) * log( (1 + alpha + 2 * sqrt(alpha))/(1 + alpha - 2 * sqrt(alpha)) )  ) 
     dat <- data.frame(r=r, h2=h2)
@@ -297,6 +368,7 @@ server <- function(input, output) {
     } else if (input$xaxis2 == "N2") {
     N <- 0:input$N2
     lambda <- (input$Me2)  / (input$h22 * log(2 * input$Ne2))
+    #lambda <- (input$Me2*(1-input$h22))  / (input$h22 * log(2 * input$Ne2))
     alpha <- 1 + 2 *( input$Me2 / (N * input$h22 * log(2 * input$Ne2)) )
     r <- sqrt(  1 - lambda/(2 * N * sqrt(alpha)) * log( (1 + alpha + 2 * sqrt(alpha))/(1 + alpha - 2 * sqrt(alpha)) )  ) 
     dat <- data.frame(r=r, N=N)
@@ -304,6 +376,7 @@ server <- function(input, output) {
     } else if (input$xaxis2 == "Me2"){ 
     Me <- 0:input$Me2
     lambda <- (Me) / (input$h22 * log(2 * input$Ne2))
+    #lambda <- (Me*(1-input$h22)) / (input$h22 * log(2 * input$Ne2))
     alpha <- 1 + 2 *(Me / (input$N2 * input$h22 * log(2 * input$Ne2)) )
     r <- sqrt(  1 - lambda/(2 * input$N2 * sqrt(alpha)) * log( (1 + alpha + 2 * sqrt(alpha))/(1 + alpha - 2 * sqrt(alpha)) )  ) 
     dat <- data.frame(r=r, Me=Me)
@@ -311,6 +384,7 @@ server <- function(input, output) {
     } else  (input$xaxis2 == "Ne2") 
     Ne <- 0:input$Ne2
     lambda <- (input$Me2) / (input$h22 * log(2 * Ne))
+    #lambda <- (input$Me2*(1-input$h22)) / (input$h22 * log(2 * Ne))
     alpha <- 1 + 2 *(input$Me2 / (input$N2 * input$h22 * log(2 * Ne)) )
     r <- sqrt(  1 - lambda/(2 * input$N2 * sqrt(alpha)) * log( (1 + alpha + 2 * sqrt(alpha))/(1 + alpha - 2 * sqrt(alpha)) )  ) 
     dat <- data.frame(r=r, Ne=Ne)
@@ -354,6 +428,51 @@ server <- function(input, output) {
   })
     
   
+    
+    
+    # S7
+    output$distPlot7 <- renderPlotly({
+      if (input$xaxis7 == "h27") {
+        #h2 <- seq(0, 1, by=0.001)
+        h2 <- seq(0, input$h27, by=0.001)
+        r <- sqrt(   (h2/(1-h2))  /  (input$Me7/input$N7 + h2/(1-h2))  ) 
+        dat <- data.frame(r=r, h2=h2)
+        return(plot_ly(dat, x=~h2, y=~r, type = 'scatter', mode = 'markers', text = ~paste('h2:', h2, "<br>r: ", r)))
+      } else if (input$xaxis7 == "N7") {
+        N <- 0:input$N7
+        r <- sqrt(   (input$h27/(1-input$h27))  /  (input$Me7/N + input$h27/(1-input$h27))  ) 
+        dat <- data.frame(r=r, N=N)
+        return(plot_ly(dat, x=~N, y=~r, type = 'scatter', mode = 'markers',text = ~paste('N:', N, "<br>r: ", r))) 
+      } else (input$xaxis7 == "Me7") 
+        Me <- 0:input$Me7
+        r <- sqrt(   (input$h27/(1-input$h27))  /  (Me/input$N7 + input$h27/(1-input$h27))  ) 
+        dat <- data.frame(r=r, Me=Me)
+        return(plot_ly(dat, x=~Me , y=~r, type = 'scatter', mode = 'markers',text = ~paste('Me:', Me, "<br>r: ", r)))
+      
+      
+    })
+    
+    
+    # S8
+    output$distPlot8 <- renderPlotly({
+      if (input$xaxis8 == "h28") {
+        #h2 <- seq(0, 1, by=0.001)
+        h2 <- seq(0, input$h28, by=0.001)
+        r <- sqrt(   (h2/(1-h2))  /  (input$E8 + h2/(1-h2))  ) 
+        dat <- data.frame(r=r, h2=h2)
+        return(plot_ly(dat, x=~h2, y=~r, type = 'scatter', mode = 'markers', text = ~paste('h2:', h2, "<br>r: ", r)))
+      } else (input$xaxis8 == "E8") 
+      E2 <- seq(0, input$E8, by=0.001)
+      r <- sqrt(   (input$h28/(1-input$h28))  /  (E2 + input$h28/(1-input$h28))  ) 
+      dat <- data.frame(r=r, E=E2)
+      return(plot_ly(dat, x=~E2 , y=~r, type = 'scatter', mode = 'markers',text = ~paste('E2:', E2, "<br>r: ", r)))
+      
+      
+    })
+    
+    
+    
+    
     
     
     # S5
@@ -408,7 +527,7 @@ server <- function(input, output) {
           term1 <- matrix(c(b_AC * input$rG_AC6 * sqrt(input$h26a/input$MeAC6), b_BC * input$rG_BC6 * sqrt(input$h26b/input$MeBC6)), nrow=1, ncol=2)
           
           term2 <- matrix(c(input$h26a/input$MeAC6 + 1/input$N6a, input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(input$MeAC6*input$MeBC6),  input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(input$MeAC6*input$MeBC6), input$h26b/input$MeBC6 + 1/input$N6b ), nrow=2, ncol=2) 
-          term2 <- term2 + diag(ncol(term2))*0.001 
+          term2 <- term2 + diag(ncol(term2))*1e-10 
           term2 <- solve(term2)
           
           term3 <- matrix(c(b_AC * input$rG_AC6 * sqrt(input$h26a/input$MeAC6), b_BC * input$rG_BC6 * sqrt(input$h26b/input$MeBC6)), nrow=2, ncol=1)
@@ -442,7 +561,7 @@ server <- function(input, output) {
         term1 <- matrix(c(input$b_AC6 * rG_AC * sqrt(input$h26a/input$MeAC6), input$b_BC6 * rG_BC * sqrt(input$h26b/input$MeBC6)), nrow=1, ncol=2)
         
         term2 <- matrix(c(input$h26a/input$MeAC6 + 1/input$N6a, input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(input$MeAC6*input$MeBC6),  input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(input$MeAC6*input$MeBC6), input$h26b/input$MeBC6 + 1/input$N6b ), nrow=2, ncol=2) 
-        term2 <- term2 + diag(ncol(term2))*0.001 
+        term2 <- term2 + diag(ncol(term2))*1e-10
         term2 <- solve(term2)
         
         term3 <- matrix(c(input$b_AC6 * rG_AC * sqrt(input$h26a/input$MeAC6), input$b_BC6 * rG_BC * sqrt(input$h26b/input$MeBC6)), nrow=2, ncol=1)
@@ -477,7 +596,7 @@ server <- function(input, output) {
           term1 <- matrix(c(input$b_AC6 * input$rG_AC6 * sqrt(h2a/input$MeAC6), input$b_BC6 * input$rG_BC6 * sqrt(h2b/input$MeBC6)), nrow=1, ncol=2)
           
           term2 <- matrix(c(h2a/input$MeAC6 + 1/input$N6a, input$rG_AB6 * sqrt(h2a*h2b)/sqrt(input$MeAC6*input$MeBC6),  input$rG_AB6 * sqrt(h2a*h2b)/sqrt(input$MeAC6*input$MeBC6), h2b/input$MeBC6 + 1/input$N6b ), nrow=2, ncol=2) 
-          term2 <- term2 + diag(ncol(term2))*0.001 
+          term2 <- term2 + diag(ncol(term2))*1e-10 
           term2 <- solve(term2)
           
           term3 <- matrix(c(input$b_AC6 * input$rG_AC6 * sqrt(h2a/input$MeAC6), input$b_BC6 * input$rG_BC6 * sqrt(h2b/input$MeBC6)), nrow=2, ncol=1)
@@ -512,7 +631,7 @@ server <- function(input, output) {
           term1 <- matrix(c(input$b_AC6 * input$rG_AC6 * sqrt(input$h26a/input$MeAC6), input$b_BC6 * input$rG_BC6 * sqrt(input$h26b/input$MeBC6)), nrow=1, ncol=2)
           
           term2 <- matrix(c(input$h26a/input$MeAC6 + 1/Na, input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(input$MeAC6*input$MeBC6),  input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(input$MeAC6*input$MeBC6), input$h26b/input$MeBC6 + 1/Nb ), nrow=2, ncol=2) 
-          term2 <- term2 + diag(ncol(term2))*0.001 
+          term2 <- term2 + diag(ncol(term2))*1e-10
           term2 <- solve(term2)
           
           term3 <- matrix(c(input$b_AC6 * input$rG_AC6 * sqrt(input$h26a/input$MeAC6), input$b_BC6 * input$rG_BC6 * sqrt(input$h26b/input$MeBC6)), nrow=2, ncol=1)
@@ -547,7 +666,7 @@ server <- function(input, output) {
         term1 <- matrix(c(input$b_AC6 * input$rG_AC6 * sqrt(input$h26a/MeAC), input$b_BC6 * input$rG_BC6 * sqrt(input$h26b/MeBC)), nrow=1, ncol=2)
         
         term2 <- matrix(c(input$h26a/MeAC + 1/input$N6a, input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(MeAC*MeBC),  input$rG_AB6 * sqrt(input$h26a*input$h26b)/sqrt(MeAC*MeBC), input$h26b/MeBC + 1/input$N6b ), nrow=2, ncol=2) 
-        term2 <- term2 + diag(ncol(term2))*0.001 
+        term2 <- term2 + diag(ncol(term2))*1e-10 
         term2 <- solve(term2)
         
         term3 <- matrix(c(input$b_AC6 * input$rG_AC6 * sqrt(input$h26a/MeAC), input$b_BC6 * input$rG_BC6 * sqrt(input$h26b/MeBC)), nrow=2, ncol=1)
